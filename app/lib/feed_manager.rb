@@ -7,7 +7,7 @@ class FeedManager
   include Redisable
 
   # Maximum number of items stored in a single feed
-  MAX_ITEMS = 800
+  MAX_ITEMS = (ENV['MAX_FEED_ITEMS_COUNT'] || 800).to_i
 
   # Number of items in the feed since last reblog of status
   # before the new reblog will be inserted. Must be <= MAX_ITEMS
