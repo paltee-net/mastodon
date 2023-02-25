@@ -215,6 +215,8 @@ group :production do
   gem 'lograge', '~> 0.12'
 end
 
+gem 'newrelic_rpm'
+
 gem 'cocoon', '~> 1.2'
 gem 'concurrent-ruby', require: false
 gem 'connection_pool', require: false
