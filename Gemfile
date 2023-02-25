@@ -195,6 +195,8 @@ group :production do
   gem 'lograge', '~> 0.12'
 end
 
+gem 'newrelic_rpm'
+
 gem 'concurrent-ruby', require: false
 gem 'connection_pool', require: false
 gem 'xorcist', '~> 1.1'
