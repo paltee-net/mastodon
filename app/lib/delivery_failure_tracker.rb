@@ -15,10 +15,12 @@ class DeliveryFailureTracker
 
   def track_failure!
     redis.sadd(exhausted_deliveries_key, failure_time)
+    delivery_stats_tracker.track_failure!
     UnavailableDomain.create(domain: @host) if reached_failure_threshold?
   end
 
   def track_success!
+    delivery_stats_tracker.track_success!
     redis.del(exhausted_deliveries_key)
     UnavailableDomain.find_by(domain: @host)&.destroy
   end
@@ -110,5 +112,9 @@ class DeliveryFailureTracker
 
   def reached_failure_threshold?
     failures >= FAILURE_THRESHOLDS[@resolution]
+  end
+
+  def delivery_stats_tracker
+    @delivery_stats_tracker ||= DeliveryStatsTracker.new(@host)
   end
 end
