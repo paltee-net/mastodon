@@ -309,6 +309,7 @@ namespace :api, format: false do
     resources :media, only: [:create]
     resources :suggestions, only: [:index]
     resource :instance, only: [:show]
+    resources :instance_stats, only: [:show], param: :domain, constraints: { domain: %r{[^\/]+} }
     resources :filters, only: [:index, :create, :show, :update, :destroy] do
       scope module: :filters do
         resources :keywords, only: [:index, :create]
