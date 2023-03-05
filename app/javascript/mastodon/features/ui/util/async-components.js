@@ -198,6 +198,10 @@ export function ClosedRegistrationsModal () {
   return import(/*webpackChunkName: "modals/closed_registrations_modal" */'../../closed_registrations_modal');
 }
 
+export function InstanceStats () {
+  return import(/*webpackChunkName: "features/instance_stats" */'../../instance_stats');
+}
+
 export function About () {
   return import(/*webpackChunkName: "features/about" */'../../about');
 }

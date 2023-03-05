@@ -17,6 +17,7 @@ import filters from './filters';
 import followed_tags from './followed_tags';
 import height_cache from './height_cache';
 import history from './history';
+import instance_stats from './instance_stats';
 import listAdder from './list_adder';
 import listEditor from './list_editor';
 import lists from './lists';
@@ -61,6 +62,7 @@ const reducers = {
   settings,
   push_notifications,
   server,
+  instance_stats,
   contexts,
   compose,
   search,

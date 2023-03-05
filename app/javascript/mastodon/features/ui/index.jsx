@@ -66,6 +66,7 @@ import {
   Directory,
   Explore,
   Onboarding,
+  InstanceStats,
   About,
   PrivacyPolicy,
 } from './util/async-components';
@@ -131,7 +132,7 @@ class SwitchingColumnsArea extends PureComponent {
     singleColumn: PropTypes.bool,
   };
 
-  UNSAFE_componentWillMount () {
+  UNSAFE_componentWillMount() {
     if (this.props.singleColumn) {
       document.body.classList.toggle('layout-single-column', true);
       document.body.classList.toggle('layout-multiple-columns', false);
@@ -141,7 +142,7 @@ class SwitchingColumnsArea extends PureComponent {
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (![this.props.location.pathname, '/'].includes(prevProps.location.pathname)) {
       this.node.handleChildrenContentChange();
     }
@@ -158,7 +159,7 @@ class SwitchingColumnsArea extends PureComponent {
     }
   };
 
-  render () {
+  render() {
     const { children, singleColumn } = this.props;
     const { signedIn } = this.props.identity;
     const pathName = this.props.location.pathname;
@@ -186,7 +187,7 @@ class SwitchingColumnsArea extends PureComponent {
             {redirect}
 
             {singleColumn ? <Redirect from='/deck' to='/home' exact /> : null}
-            {singleColumn && pathName.startsWith('/deck/') ? <Redirect from={pathName} to={{...this.props.location, pathname: pathName.slice(5)}} /> : null}
+            {singleColumn && pathName.startsWith('/deck/') ? <Redirect from={pathName} to={{ ...this.props.location, pathname: pathName.slice(5) }} /> : null}
             {/* Redirect old bookmarks (without /deck) with home-like routes to the advanced interface */}
             {!singleColumn && pathName === '/getting-started' ? <Redirect from='/getting-started' to='/deck/getting-started' exact /> : null}
             {!singleColumn && pathName === '/home' ? <Redirect from='/home' to='/deck/getting-started' exact /> : null}
@@ -195,6 +196,7 @@ class SwitchingColumnsArea extends PureComponent {
             <WrappedRoute path='/keyboard-shortcuts' component={KeyboardShortcuts} content={children} />
             <WrappedRoute path='/about' component={About} content={children} />
             <WrappedRoute path='/privacy-policy' component={PrivacyPolicy} content={children} />
+            <WrappedRoute path='/instance-stats/:domain' component={InstanceStats} content={children} />
 
             <WrappedRoute path={['/home', '/timelines/home']} component={HomeTimeline} content={children} />
             <Redirect from='/timelines/public' to='/public' exact />
@@ -385,7 +387,7 @@ class UI extends PureComponent {
     }
   };
 
-  componentDidMount () {
+  componentDidMount() {
     const { signedIn } = this.props.identity;
 
     window.addEventListener('focus', this.handleWindowFocus, false);
@@ -399,7 +401,7 @@ class UI extends PureComponent {
     document.addEventListener('dragleave', this.handleDragLeave, false);
     document.addEventListener('dragend', this.handleDragEnd, false);
 
-    if ('serviceWorker' in  navigator) {
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('message', this.handleServiceWorkerPostMessage);
     }
 
@@ -417,7 +419,7 @@ class UI extends PureComponent {
     };
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.removeEventListener('focus', this.handleWindowFocus);
     window.removeEventListener('blur', this.handleWindowBlur);
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
@@ -465,7 +467,7 @@ class UI extends PureComponent {
   };
 
   handleHotkeyFocusColumn = e => {
-    const index  = (e.key * 1) + 1; // First child is drawer, skip that
+    const index = (e.key * 1) + 1; // First child is drawer, skip that
     const column = this.node.querySelector(`.column:nth-child(${index})`);
     if (!column) return;
     const container = column.querySelector('.scrollable');
@@ -552,7 +554,7 @@ class UI extends PureComponent {
     this.props.history.push('/follow_requests');
   };
 
-  render () {
+  render() {
     const { draggingOver } = this.state;
     const { children, isComposing, location, layout } = this.props;
 
