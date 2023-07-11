@@ -76,6 +76,17 @@ RUN apt-get update && \
 
 RUN mkdir ./build-temp && \
     cd ./build-temp && \
+    apt-get -y install --no-install-recommends autoconf make gcc pkg-config automake libtool && \
+    wget https://github.com/file/file/archive/refs/tags/FILE5_44.tar.gz && \
+    tar xzf FILE5_44.tar.gz && \
+    cd "$(tar tzf FILE5_44.tar.gz | sed -e 's@/.*@@' | sort | uniq | head -n 1)" && \
+    autoreconf --install --force && ./configure && make && make install && \
+    apt-get -y remove libmagic-mgc libmagic-dev && \
+    cd magic && make install && \
+    cd ../../../ && rm -rf ./build-temp
+
+RUN mkdir ./build-temp && \
+    cd ./build-temp && \
     wget https://imagemagick.org/archive/ImageMagick.tar.gz && \
     tar xzf ImageMagick.tar.gz && \
     cd "$(tar tzf ImageMagick.tar.gz | sed -e 's@/.*@@' | sort | uniq | head -n 1)" && \
