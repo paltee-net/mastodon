@@ -62,7 +62,6 @@ RUN apt-get update && \
         procps \
         libssl1.1 \
         libpq5 \
-        imagemagick \
         ffmpeg \
         libjemalloc2 \
         libicu67 \
@@ -74,6 +73,31 @@ RUN apt-get update && \
         libreadline8 \
         tini && \
     ln -s /opt/mastodon /mastodon
+
+RUN mkdir ./build-temp && \
+    cd ./build-temp && \
+    apt-get -y install --no-install-recommends autoconf make gcc pkg-config automake libtool && \
+    wget https://github.com/file/file/archive/refs/tags/FILE5_44.tar.gz && \
+    tar xzf FILE5_44.tar.gz && \
+    cd "$(tar tzf FILE5_44.tar.gz | sed -e 's@/.*@@' | sort | uniq | head -n 1)" && \
+    autoreconf --install --force && ./configure && make && make install && \
+    apt-get -y remove libmagic-mgc libmagic-dev && \
+    cd magic && make install && \
+    cd ../../../ && rm -rf ./build-temp
+
+RUN mkdir ./build-temp && \
+    cd ./build-temp && \
+    wget https://imagemagick.org/archive/ImageMagick.tar.gz && \
+    tar xzf ImageMagick.tar.gz && \
+    cd "$(tar tzf ImageMagick.tar.gz | sed -e 's@/.*@@' | sort | uniq | head -n 1)" && \
+    apt-get -y --no-install-recommends install \
+        make gcc g++ pkg-config \
+        libjpeg-dev libpng-dev libpng16-16 libltdl-dev libheif-dev libraw-dev libtiff-dev libopenjp2-tools libopenjp2-7-dev libjpeg-turbo-progs libfreetype6-dev libheif-dev libfreetype6-dev libopenexr-dev libwebp-dev libgif-dev && \
+    ./configure --with-modules --enable-file-type --with-quantum-depth=32 --with-jpeg=yes --with-png=yes --with-gif=yes --with-webp=yes --with-heic=yes --with-raw=yes --with-tiff=yes --with-openjp2 --with-freetype=yes --with-webp=yes --with-openexr=yes --with-gslib=yes --with-gif=yes --with-perl=yes --with-jxl=yes && \
+    make && make install && \
+    ldconfig /usr/local/lib && \
+    cd ../../ && \
+    rm -rf ./build-temp
 
 # Note: no, cleaning here since Debian does this automatically
 # See the file /etc/apt/apt.conf.d/docker-clean within the Docker image's filesystem
