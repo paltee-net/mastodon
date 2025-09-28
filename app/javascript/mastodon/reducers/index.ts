@@ -17,6 +17,7 @@ import filters from './filters';
 import height_cache from './height_cache';
 import history from './history';
 import { listsReducer } from './lists';
+import instance_stats from './instance_stats';
 import { markersReducer } from './markers';
 import media_attachments from './media_attachments';
 import meta from './meta';
@@ -59,6 +60,7 @@ const reducers = {
   settings,
   push_notifications,
   server,
+  instance_stats,
   contexts: contextsReducer,
   compose: composeReducer,
   search: searchReducer,
